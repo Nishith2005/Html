@@ -50,7 +50,7 @@
                 </h1>
                 <p class="tagline">Click through our guided visual tool to explore potential causes based on your symptoms. Simple, intuitive, and informative.</p>
               <div class="diagnosis-dropdown" style="display: inline-block;">
-           <button class="diagnosis-dropbtn" onclick="openPopup()">Start Your Diagnosis Guide</button>
+           <button class="diagnosis-dropbtn" onclick="startDiagnosis()">Start Your Diagnosis Guide</button>
       </div>
 </div>
 </section>
@@ -178,7 +178,17 @@
     showTestimonial(currentIndex);
   }
 
-  setInterval(nextTestimonial, 4000); 
+  setInterval(nextTestimonial, 4000);
+
+  function startDiagnosis() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      openPopup();
+    } else {
+      window.location.href = 'user_login.html';
+    }
+  }
+
    function openPopup() {
     document.getElementById('popupModal').style.display = 'block';
   }

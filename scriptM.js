@@ -27,21 +27,21 @@ dismissNotificationBtn.addEventListener('click', hideNotification);
 function disableBodyPartInteractions() {
   hotspots.forEach(h => {
     h.classList.add('interaction-disabled');
-    h.classList.remove('pulse'); 
+    h.classList.remove('pulse');
     const originalSrc = h.getAttribute('data-original-src');
     if (originalSrc) h.src = originalSrc;
   });
   backButtons.forEach(b => {
     b.classList.add('disabled');
-    b.classList.remove('pulse'); 
+    b.classList.remove('pulse');
   });
-  frontViewBtn.classList.add('interaction-disabled-button'); 
+  frontViewBtn.classList.add('interaction-disabled-button');
   backViewBtn.classList.add('interaction-disabled-button');
 }
 function enableBodyPartInteractions() {
   hotspots.forEach(h => {
     h.classList.remove('interaction-disabled');
-    if (!h.getAttribute('data-original-src')) { 
+    if (!h.getAttribute('data-original-src')) {
         h.setAttribute('data-original-src', h.src);
     }
     h.classList.add('pulse');
@@ -120,7 +120,7 @@ hotspots.forEach(hotspot => {
 });
 backButtons.forEach(button => {
   button.addEventListener('click', () => {
-    if (button.classList.contains('disabled') || isDiagnosisInProgress) { 
+    if (button.classList.contains('disabled') || isDiagnosisInProgress) {
       showNotification("Please complete the current diagnosis or restart before interacting with other parts.");
       return;
     }
@@ -620,6 +620,44 @@ const diagnosticOutcomes = {
 let currentBodyPart = null;
 let currentQuestionIndex = 0;
 let userResponses = [];
+
+async function saveDiagnosis(bodyPart, condition, description, severity) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    showNotification('You must be logged in to save your diagnosis history.');
+    setTimeout(() => {
+      window.location.href = 'user_login.html';
+    }, 2500);
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/api/diagnoses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token,
+      },
+      body: JSON.stringify({
+        bodyPart,
+        condition,
+        description,
+        severity,
+      }),
+    });
+
+    if (response.ok) {
+      showNotification('Diagnosis saved successfully!');
+    } else {
+      const errorData = await response.json();
+      showNotification(`Failed to save diagnosis: ${errorData.msg || 'Server error'}`);
+    }
+  } catch (error) {
+    console.error('Error saving diagnosis:', error);
+    showNotification('An error occurred while saving the diagnosis.');
+  }
+}
+
 function startDiagnosticFlow(bodyPart) {
   if (isDiagnosisInProgress) {
     showNotification("Please complete the current diagnosis or restart before starting a new one.");
@@ -630,7 +668,7 @@ function startDiagnosticFlow(bodyPart) {
   currentBodyPart = bodyPart;
   currentQuestionIndex = 0;
   userResponses = [];
-  diagnosticFlow.innerHTML = ''; 
+  diagnosticFlow.innerHTML = '';
   resultsContainer.innerHTML = '';
   diagnosticFlow.classList.add('active');
   resultsContainer.classList.remove('active');
@@ -668,7 +706,7 @@ function renderQuestion() {
           </button>
         `).join('')}
       </div>
-      <button class="animated-button ${isLastQuestion ? 'show-results-btn-animated' : 'next-btn-animated'} action-button-margin disabled" 
+      <button class="animated-button ${isLastQuestion ? 'show-results-btn-animated' : 'next-btn-animated'} action-button-margin disabled"
               aria-label="${isLastQuestion ? 'Show diagnostic results' : 'Proceed to next question'}">
         <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
           <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
@@ -694,12 +732,12 @@ function renderQuestion() {
     });
   });
   actionButtonAnimated.addEventListener('click', () => {
-    if (actionButtonAnimated.classList.contains('disabled')) return; 
+    if (actionButtonAnimated.classList.contains('disabled')) return;
     if (isLastQuestion) {
       showResults();
     } else {
       currentQuestionIndex++;
-      renderQuestion(); 
+      renderQuestion();
     }
   });
 }
@@ -728,6 +766,7 @@ function showResults() {
       <div class="diagnosis-desc">${outcome.description}</div>
       <div class="severity ${outcome.severity}">${outcome.severity.charAt(0).toUpperCase() + outcome.severity.slice(1)} Severity</div>
       ${outcome.wiki ? `<a href="${outcome.wiki}" target="_blank" class="wiki-link" aria-label="Learn more about ${outcome.name} on Wikipedia">Learn More</a>` : ''}
+      <button class="animated-button save-btn" data-condition="${outcome.name}" data-description="${outcome.description}" data-severity="${outcome.severity}"><span class="text">Save Diagnosis</span></button>
     </div>
   `).join('');
   resultsContainer.innerHTML = `
@@ -740,8 +779,6 @@ function showResults() {
   requestAnimationFrame(() => {
     cards.forEach(card => card.classList.add('active'));
   });
-  const restartButton = resultsContainer.querySelector('.restart-btn');
-  restartButton.addEventListener('click', resetDiagnosticFlow);
 }
 function resetDiagnosticFlow() {
   isDiagnosisInProgress = false;
@@ -757,6 +794,22 @@ function resetDiagnosticFlow() {
   infoPanel.querySelector('h2').textContent = 'Welcome to the Interactive Diagnostic Tool';
   infoPanel.querySelectorAll('.info-text').forEach(p => p.style.display = 'block');
 }
+
+resultsContainer.addEventListener('click', function(event) {
+    const target = event.target;
+    const button = target.closest('button');
+    if (!button) return;
+
+    if (button.classList.contains('save-btn')) {
+        const condition = button.dataset.condition;
+        const description = button.dataset.description;
+        const severity = button.dataset.severity;
+        saveDiagnosis(currentBodyPart, condition, description, severity);
+    } else if (button.classList.contains('restart-btn')) {
+        resetDiagnosticFlow();
+    }
+});
+
 enableBodyPartInteractions();
 const currentYearSpan = document.getElementById('current-year');
 if (currentYearSpan) {

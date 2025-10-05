@@ -448,6 +448,43 @@ let currentQuestionIndex = 0;
 let userResponses = [];
 let isDiagnosisInProgress = false;
 
+async function saveDiagnosis(bodyPart, condition, description, severity) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    showCustomAlert('Not Logged In', 'You must be logged in to save your diagnosis history.');
+    setTimeout(() => {
+      window.location.href = 'user_login.html';
+    }, 2500);
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/api/diagnoses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token,
+      },
+      body: JSON.stringify({
+        bodyPart,
+        condition,
+        description,
+        severity,
+      }),
+    });
+
+    if (response.ok) {
+      showFeedbackMessage('Diagnosis saved successfully!');
+    } else {
+      const errorData = await response.json();
+      showCustomAlert('Error', `Failed to save diagnosis: ${errorData.msg || 'Server error'}`);
+    }
+  } catch (error) {
+    console.error('Error saving diagnosis:', error);
+    showCustomAlert('Error', 'An error occurred while saving the diagnosis.');
+  }
+}
+
 function startDiagnosticFlow(bodyPart) {
   if (isDiagnosisInProgress) {
     showCustomAlert("Diagnosis in Progress", "Please complete the current diagnosis before selecting another body part.");
@@ -575,6 +612,7 @@ function showResults() {
       <div class="diagnosis-desc">${outcome.description}</div>
       <div class="severity ${outcome.severity}">${outcome.severity.charAt(0).toUpperCase() + outcome.severity.slice(1)} Severity</div>
       ${outcome.wiki ? `<a href="${outcome.wiki}" target="_blank" class="wiki-link" aria-label="Learn more about ${outcome.name} on Wikipedia">Learn More</a>` : ''}
+      <button class="animated-button save-btn" data-condition="${outcome.name}" data-description="${outcome.description}" data-severity="${outcome.severity}"><span class="text">Save Diagnosis</span></button>
     </div>
   `).join('');
 
@@ -589,9 +627,6 @@ function showResults() {
   requestAnimationFrame(() => {
     cards.forEach(card => card.classList.add('active'));
   });
-
-  const restartButton = resultsContainer.querySelector('.restart-btn');
-  restartButton.addEventListener('click', resetDiagnosticFlow);
 }
 
 function resetDiagnosticFlow() {
@@ -609,6 +644,21 @@ function resetDiagnosticFlow() {
   infoPanel.querySelector('h2').textContent = 'Welcome to the Female Interactive Diagnostic Tool';
   infoPanel.querySelectorAll('.info-text').forEach(p => p.style.display = 'block');
 }
+
+resultsContainer.addEventListener('click', function(event) {
+    const target = event.target;
+    const button = target.closest('button');
+    if (!button) return;
+
+    if (button.classList.contains('save-btn')) {
+        const condition = button.dataset.condition;
+        const description = button.dataset.description;
+        const severity = button.dataset.severity;
+        saveDiagnosis(currentBodyPart, condition, description, severity);
+    } else if (button.classList.contains('restart-btn')) {
+        resetDiagnosticFlow();
+    }
+});
 
 enableBodyPartInteractions();
 document.getElementById('current-year').textContent = new Date().getFullYear();

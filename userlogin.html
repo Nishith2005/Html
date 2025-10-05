@@ -17,7 +17,7 @@
       color: #2d3748;
       min-height: 100vh;
       padding: 20px;
-      padding-top: 160px; 
+      padding-top: 160px;
       position: relative;
       overflow-x: hidden;
     }
@@ -41,21 +41,21 @@
       100% { transform: translateY(-100px); }
     }
 
-    .logo-link { 
-      position: absolute; 
+    .logo-link {
+      position: absolute;
       top: 20px;
       left: 20px;
       z-index: 1000;
     }
 
-    .logo-main { 
+    .logo-main {
       width: 125px;
       height: 125px;
     }
 
     .header {
       text-align: center;
-      margin: 0 0 40px; 
+      margin: 0 0 40px;
       width: 100%;
     }
 
@@ -65,7 +65,7 @@
       margin-bottom: 10px;
       font-weight: 700;
     }
-    
+
     .user-greeting {
         font-size: 1.2rem;
         color: #4a5568;
@@ -88,9 +88,9 @@
       width: 100%;
       max-width: 700px;
       text-align: left;
-      display: flex; 
-      flex-direction: column; 
-      
+      display: flex;
+      flex-direction: column;
+
     }
 
     .dashboard-container h2 {
@@ -99,23 +99,30 @@
       padding-bottom: 15px;
       margin-bottom: 20px;
       font-weight: 600;
-      width: 100%; 
-      text-align: left; 
+      width: 100%;
+      text-align: left;
     }
 
     .ailments-list {
       list-style: none;
       padding: 0;
-      width: 100%; 
+      width: 100%;
     }
 
     .ailments-list li {
       background-color: #f7fafc;
-      border-left: 4px solid #ef4444; 
+      border-left: 4px solid #ef4444;
       border-radius: 10px;
       padding: 15px 20px;
       margin-bottom: 15px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ailment-details {
+        flex-grow: 1;
     }
 
     .ailments-list .ailment-part {
@@ -130,7 +137,7 @@
       color: #4a5568;
       line-height: 1.5;
     }
-    .ailments-list .condition-info .severity { 
+    .ailments-list .condition-info .severity {
         display: inline-block;
         padding: 3px 10px;
         border-radius: 15px;
@@ -138,28 +145,47 @@
         margin-top: 5px;
         font-weight: 500;
     }
-    .ailments-list .condition-info .low { background-color: #e6fffa; color: #38a169; } 
-    .ailments-list .condition-info .medium { background-color: #fefcbf; color: #d69e2e; } 
-    .ailments-list .condition-info .high { background-color: #fff5f5; color: #e53e3e; } 
+    .ailments-list .condition-info .low { background-color: #e6fffa; color: #38a169; }
+    .ailments-list .condition-info .medium { background-color: #fefcbf; color: #d69e2e; }
+    .ailments-list .condition-info .high { background-color: #fff5f5; color: #e53e3e; }
+
+    .delete-btn {
+        background-color: #ef4444;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .delete-btn:hover {
+        background-color: #d93737;
+    }
 
 
     .no-ailments {
         text-align: center;
-        color: #718096; 
+        color: #718096;
         font-size: 1rem;
         padding: 20px;
         background-color: #f0f4f8;
         border-radius: 8px;
         width: 100%;
     }
-    
-    .footer { 
+
+    .footer {
       text-align: center;
       padding: 20px;
       color: #718096;
       font-size: 0.9rem;
       margin-top: 40px;
       width: 100%;
+    }
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
     }
     .animated-button {
       position: relative;
@@ -173,8 +199,8 @@
       background-color: inherit;
       border-radius: 100px;
       font-weight: 600;
-      color: #1a3c5e; 
-      box-shadow: 0 0 0 2px #1a3c5e; 
+      color: #1a3c5e;
+      box-shadow: 0 0 0 2px #1a3c5e;
       cursor: pointer;
       overflow: hidden;
       transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -183,13 +209,12 @@
       justify-content: center;
       min-width: 100px;
       box-sizing: border-box;
-      margin-top: 25px; 
     }
 
     .animated-button svg {
       position: absolute;
       width: 24px;
-      fill: #1a3c5e; 
+      fill: #1a3c5e;
       z-index: 9;
       transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     }
@@ -209,7 +234,7 @@
       transform: translate(-50%, -50%);
       width: 20px;
       height: 20px;
-      background-color: #4fd1c5; 
+      background-color: #4fd1c5;
       border-radius: 50%;
       opacity: 0;
       transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
@@ -218,15 +243,15 @@
     .animated-button .text {
       position: relative;
       z-index: 1;
-      transform: translateX(-12px); 
+      transform: translateX(-12px);
       transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .animated-button:hover {
-      box-shadow: 0 0 0 4px transparent; 
-      color: #ffffff; 
-      border-radius: 12px; 
-      border-color: #4fd1c5; 
+      box-shadow: 0 0 0 4px transparent;
+      color: #ffffff;
+      border-radius: 12px;
+      border-color: #4fd1c5;
     }
 
     .animated-button:hover .arr-1 {
@@ -238,34 +263,34 @@
     }
 
     .animated-button:hover .text {
-      transform: translateX(12px); 
+      transform: translateX(12px);
     }
 
     .animated-button:hover svg {
-      fill: #ffffff; 
+      fill: #ffffff;
     }
 
     .animated-button:active {
       scale: 0.95;
-      box-shadow: 0 0 0 4px #38a169; 
+      box-shadow: 0 0 0 4px #38a169;
     }
 
     .animated-button:hover .circle {
-      width: 220px; 
+      width: 220px;
       height: 220px;
       opacity: 1;
     }
 
     @media (max-width: 768px) {
       body {
-        padding-top: 140px; 
+        padding-top: 140px;
       }
       .logo-link {
         top: 15px;
         left: 15px;
       }
       .logo-main {
-        width: 100px; 
+        width: 100px;
         height: 100px;
       }
       h1 {
@@ -285,48 +310,32 @@
   </style>
 </head>
 <body>
-  <a href="New_final.html" class="logo-link"> 
+  <a href="index.html" class="logo-link">
     <img src="logos.png" alt="Health Insight Hub Logo" class="logo-main">
   </a>
 
   <div class="header">
     <h1>User Dashboard</h1>
-    <p class="user-greeting">Welcome back, Aanya!</p>
+    <p class="user-greeting">Welcome back!</p>
     <p class="subtitle">Here's a summary of your recent diagnostic results.</p>
   </div>
 
   <div class="dashboard-container">
     <h2>My Diagnosed Ailments</h2>
-    
-    <ul class="ailments-list">
-      <li>
-        <div class="ailment-part">Right Knee</div>
-        <div class="condition-info">
-            <strong>Potential Condition:</strong> Patellofemoral Pain Syndrome / Chondromalacia Patellae<br>
-            <strong>Description:</strong> Kneecap pain, swelling, instability, but not linked to specific high-risk activities. <br>
-            <span class="severity medium">Medium Severity</span>
-        </div>
-      </li>
-      <li>
-        <div class="ailment-part">Left Hand</div>
-        <div class="condition-info">
-            <strong>Potential Condition:</strong> Isolated Nerve Symptoms (Monitor)<br>
-            <strong>Description:</strong> Only tingling/numbness reported. Monitor or consult if persistent.<br>
-            <span class="severity low">Low Severity</span>
-        </div>
-      </li>
-      </ul>
 
-    <button class="animated-button" onclick="window.location.href='index.html'">
-      <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-      </svg>
-      <span class="text">Diagnose Again</span>
-      <span class="circle"></span>
-      <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-      </svg>
-    </button>
+    <ul class="ailments-list" id="ailments-list">
+      <!-- Diagnosis history will be populated here -->
+    </ul>
+    <div id="no-ailments" class="no-ailments" style="display: none;">You have no diagnosis history.</div>
+
+    <div class="button-group">
+        <button class="animated-button" id="show-history-btn">
+            <span class="text">Show History</span>
+        </button>
+        <button class="animated-button" id="logout-btn">
+            <span class="text">Logout</span>
+        </button>
+    </div>
 
   </div>
 
@@ -335,6 +344,104 @@
   </footer>
   <script>
     document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    const showHistoryBtn = document.getElementById('show-history-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const ailmentsList = document.getElementById('ailments-list');
+    const noAilmentsMsg = document.getElementById('no-ailments');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = 'user_login.html';
+    }
+
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    });
+
+    showHistoryBtn.addEventListener('click', fetchDiagnosisHistory);
+
+    async function fetchDiagnosisHistory() {
+        try {
+            const response = await fetch('http://localhost:5000/api/diagnoses', {
+                headers: {
+                    'x-auth-token': token,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch history');
+            }
+
+            const diagnoses = await response.json();
+            renderDiagnoses(diagnoses);
+
+        } catch (error) {
+            console.error('Error fetching history:', error);
+            ailmentsList.innerHTML = '<li>Error loading history.</li>';
+        }
+    }
+
+    function renderDiagnoses(diagnoses) {
+        ailmentsList.innerHTML = '';
+        if (diagnoses.length === 0) {
+            noAilmentsMsg.style.display = 'block';
+        } else {
+            noAilmentsMsg.style.display = 'none';
+            diagnoses.forEach(diagnosis => {
+                const li = document.createElement('li');
+                li.setAttribute('data-id', diagnosis._id);
+
+                const severityClass = diagnosis.severity.toLowerCase();
+
+                li.innerHTML = `
+                    <div class="ailment-details">
+                        <div class="ailment-part">${diagnosis.bodyPart}</div>
+                        <div class="condition-info">
+                            <strong>Potential Condition:</strong> ${diagnosis.condition}<br>
+                            <strong>Description:</strong> ${diagnosis.description}<br>
+                            <span class="severity ${severityClass}">${diagnosis.severity} Severity</span>
+                        </div>
+                    </div>
+                    <button class="delete-btn">Delete</button>
+                `;
+                ailmentsList.appendChild(li);
+            });
+        }
+    }
+
+    ailmentsList.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            const li = e.target.closest('li');
+            const diagnosisId = li.getAttribute('data-id');
+
+            if (confirm('Are you sure you want to delete this diagnosis?')) {
+                try {
+                    const response = await fetch(`http://localhost:5000/api/diagnoses/${diagnosisId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'x-auth-token': token,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to delete diagnosis');
+                    }
+
+                    li.remove();
+                    const diagnoses = await response.json();
+                    if(ailmentsList.children.length === 0){
+                        noAilmentsMsg.style.display = 'block';
+                    }
+
+                } catch (error) {
+                    console.error('Error deleting diagnosis:', error);
+                    alert('Failed to delete diagnosis.');
+                }
+            }
+        }
+    });
   </script>
 </body>
 </html>

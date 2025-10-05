@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Segoe+UI&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="logos_ico.ico">
   <style>
-    
+
     body {
       display: flex;
       flex-direction: column;
@@ -17,8 +17,8 @@
       background-color: rgb(180, 223, 245);
       color: #2d3748;
       min-height: 100vh;
-      padding: 20px; 
-      padding-top: 160px; 
+      padding: 20px;
+      padding-top: 160px;
       position: relative;
       overflow-x: hidden;
     }
@@ -42,21 +42,21 @@
       100% { transform: translateY(-100px); }
     }
 
-    .logo-link { 
-      position: absolute; 
+    .logo-link {
+      position: absolute;
       top: 20px;
       left: 20px;
       z-index: 1000;
     }
 
-    .logo-main { 
+    .logo-main {
       width: 125px;
       height: 125px;
     }
 
     .header {
       text-align: center;
-      margin: 0 0 40px; 
+      margin: 0 0 40px;
       width: 100%;
     }
 
@@ -99,7 +99,7 @@
       margin-bottom: 25px;
       font-weight: 500;
     }
-    
+
     .user-count span {
       font-weight: 700;
       color: #1a3c5e;
@@ -131,7 +131,7 @@
       color: #4a5568;
       line-height: 1.5;
     }
-    
+
     .footer {
       text-align: center;
       padding: 20px;
@@ -141,16 +141,27 @@
       width: 100%;
     }
 
+    #logout-btn {
+        background-color: #1a3c5e;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+
     @media (max-width: 768px) {
       body {
-        padding-top: 140px; 
+        padding-top: 140px;
       }
       .logo-link {
         top: 15px;
         left: 15px;
       }
       .logo-main {
-        width: 100px; 
+        width: 100px;
         height: 100px;
       }
       h1 {
@@ -166,7 +177,7 @@
   </style>
 </head>
 <body>
-  <a href="New_final.html" class="logo-link"> <img src="logos_2.png" alt="Health Insight Hub Logo" class="logo-main">
+  <a href="index.html" class="logo-link"> <img src="logos_2.png" alt="Health Insight Hub Logo" class="logo-main">
   </a>
 
   <div class="header">
@@ -175,31 +186,13 @@
   </div>
 
   <div class="dashboard-container">
-    <h2>User Statistics & Diagnostics</h2>
-    <p class="user-count">Total Registered Users: <span>5</span></p>
+    <h2>User Diagnostics</h2>
+    <p class="user-count">Total Diagnoses: <span id="diagnoses-count">0</span></p>
 
-    <ul class="user-diagnostics-list">
-      <li>
-        <div class="user-name">User Alpha (Anita Sharma)</div>
-        <div class="diagnosis-info"><strong>Selected Part:</strong> Left Shoulder<br><strong>Potential Condition:</strong> Mild Shoulder Strain / Overuse</div>
-      </li>
-      <li>
-        <div class="user-name">User Beta (Rajesh Kumar)</div>
-        <div class="diagnosis-info"><strong>Selected Part:</strong> Right Foot<br><strong>Potential Condition:</strong> Plantar Fasciitis & Bunion</div>
-      </li>
-      <li>
-        <div class="user-name">User Gamma (Priya Singh)</div>
-        <div class="diagnosis-info"><strong>Selected Part:</strong> Lower Back<br><strong>Potential Condition:</strong> Mechanical Lower Back Pain with Stiffness (Muscular/Facet)</div>
-      </li>
-      <li>
-        <div class="user-name">User Delta (Vikram Patel)</div>
-        <div class="diagnosis-info"><strong>Selected Part:</strong> Right Hand<br><strong>Potential Condition:</strong> Early Carpal Tunnel / Tendinitis</div>
-      </li>
-      <li>
-        <div class="user-name">User Epsilon (Sunita Reddy)</div>
-        <div class="diagnosis-info"><strong>Selected Part:</strong> Knee<br><strong>Potential Condition:</strong> Patellofemoral Pain / Mild Instability</div>
-      </li>
+    <ul class="user-diagnostics-list" id="diagnostics-list">
+      <!-- Diagnostics will be populated here -->
     </ul>
+    <button id="logout-btn">Logout</button>
   </div>
 
   <footer class="footer">
@@ -207,6 +200,57 @@
   </footer>
   <script>
     document.getElementById('current-year').textContent = new Date().getFullYear();
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = 'admin_login.html';
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    });
+
+    async function fetchAllDiagnoses() {
+        const list = document.getElementById('diagnostics-list');
+        const countSpan = document.getElementById('diagnoses-count');
+
+        try {
+            const response = await fetch('http://localhost:5000/api/admin/all-diagnoses', {
+                headers: {
+                    'x-auth-token': token,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch diagnoses');
+            }
+
+            const diagnoses = await response.json();
+            countSpan.textContent = diagnoses.length;
+            list.innerHTML = '';
+
+            diagnoses.forEach(dx => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="user-name">User: ${dx.user.email}</div>
+                    <div class="diagnosis-info">
+                        <strong>Selected Part:</strong> ${dx.bodyPart}<br>
+                        <strong>Potential Condition:</strong> ${dx.condition}<br>
+                        <strong>Description:</strong> ${dx.description}<br>
+                        <strong>Severity:</strong> ${dx.severity}
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+        } catch (error) {
+            console.error('Error fetching diagnoses:', error);
+            list.innerHTML = '<li>Error loading diagnoses.</li>';
+        }
+    }
+
+    fetchAllDiagnoses();
   </script>
 </body>
 </html>
