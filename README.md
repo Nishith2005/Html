@@ -1,38 +1,58 @@
 # HealthInsight Hub
 
-HealthInsight Hub is an interactive, front-end web application designed to help users explore potential health conditions based on their symptoms. This tool is for educational and informational purposes only and is not a substitute for professional medical advice.
+HealthInsight Hub is an interactive web application designed to help users explore potential health symptoms in an intuitive and educational way. It is not a substitute for professional medical advice but serves as a tool to guide users in understanding their health concerns better.
 
 ## Features
 
-* **Interactive Body Map:** Users can select either a male or female body map and click on specific areas to begin a diagnostic questionnaire.
-* **Guided Questionnaire:** A series of questions are presented to the user based on the selected body part to narrow down potential conditions.
-* **Potential Conditions:** Based on the user's answers, the tool provides a list of possible conditions with descriptions and severity levels.
-* **Privacy-Focused:** The application is entirely front-end, meaning no user data is stored or transmitted. All interactions are anonymous and happen within the user's browser.
-* **User and Admin Login:** Separate login portals for users and administrators.
+- **Interactive Symptom Checker:** A visual, clickable body map to identify areas of concern.
+- **Guided Questions:** A series of questions to narrow down potential conditions.
+- **User Authentication:** Secure login and registration for users to save and view their diagnosis history.
+- **Admin Dashboard:** A separate interface for administrators to manage the application.
+- **Privacy-Focused:** User data is handled securely, and the tool is designed to be anonymous without an account.
 
-## How to Use
+## Tech Stack
 
-1.  **Open `index.html` in your web browser.**
-2.  **Click the "Start Your Diagnosis Guide" button.** This will open a popup where you can select either the male or female body map.
-3.  **Select a body part** on the interactive map to begin the questionnaire.
-4.  **Answer the series of questions** presented in the pop-up modal.
-5.  **View the potential conditions** based on your responses.
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+
+## Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+- Node.js and npm installed
+- MongoDB installed and running
+
+### Installation
+
+1. **Clone the repo:**
+   ```sh
+   git clone https://github.com/your_username/healthinsight-hub.git
+   ```
+2. **Install NPM packages for the backend:**
+   ```sh
+   cd backend
+   npm install
+   ```
+3. **Set up environment variables:**
+   Create a `.env` file in the `backend` directory and add the following:
+   ```
+   MONGO_URI=mongodb://localhost:27017/healthinsight
+   JWT_SECRET=your_jwt_secret
+   ```
+
+### Running the Application
+
+1. **Start the backend server:**
+   ```sh
+   cd backend
+   node server.js
+   ```
+2. **Open the frontend:**
+   Open the `index.html` file in your browser to start using the application.
 
 ## Disclaimer
 
-This tool is for informational purposes only and does not provide medical advice. The information provided is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
-
-## Technologies Used
-
-* HTML5
-* CSS3
-* JavaScript
-
-## File Structure
-
-* `index.html`: The main landing page of the application.
-* `indexF.html`: The interactive diagnostic tool for the female body.
-* `indexM.html`: The interactive diagnostic tool for the male body.
-* `new_style.css`, `styles.css`, `stylesM.css`: CSS files for styling the various pages.
-* `script.js`, `scriptM.js`, `scriptuid.js`: JavaScript files for the application's logic and interactivity.
-* `user_login.html`, `admin_login.html`: Login pages for users and administrators.
+This tool is for informational and educational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.

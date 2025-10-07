@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -16,7 +15,7 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/healthinsi
 // Seed admin user logic
 const seedAdminUser = async () => {
   try {
-    const adminEmail = 'admin123';
+    const adminEmail = 'admin@123';
     const adminExists = await User.findOne({ email: adminEmail });
 
     if (!adminExists) {
@@ -39,13 +38,10 @@ const seedAdminUser = async () => {
   }
 };
 
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(MONGO_URI)
 .then(() => {
   console.log('MongoDB connected');
-  seedAdminUser(); // Seed admin user after successful connection
+  seedAdminUser();
 })
 .catch(err => console.log(err));
 

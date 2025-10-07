@@ -28,6 +28,7 @@ router.post('/register', async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        email: user.email,
         role: user.role,
       },
     };
@@ -37,12 +38,15 @@ router.post('/register', async (req, res) => {
       process.env.JWT_SECRET || 'your_jwt_secret',
       { expiresIn: 3600 },
       (err, token) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Server error on token signing');
+        }
         res.json({ token });
       }
     );
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).send('Server error');
   }
 });
@@ -65,6 +69,7 @@ router.post('/login', async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        email: user.email,
         role: user.role,
       },
     };
@@ -74,12 +79,15 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET || 'your_jwt_secret',
       { expiresIn: 3600 },
       (err, token) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Server error on token signing');
+        }
         res.json({ token, role: user.role });
       }
     );
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).send('Server error');
   }
 });
