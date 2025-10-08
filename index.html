@@ -27,11 +27,18 @@
         <a href="#faq" style="text-decoration:none; color:rgb(31, 85, 139);">FAQ</a>
     </div>
 
-    <div class="dropdown">
-      <button class="dropbtn">Login</button>
-        <div class="dropdown-content">
-          <a href="user_login.html">User</a>
-          <a href="admin_login.html">Admin</a>
+    <div id="auth-container">
+        <div class="dropdown" id="login-dropdown">
+            <button class="dropbtn">Login</button>
+            <div class="dropdown-content">
+                <a href="login.html">User</a>
+                <a href="admin_login.html">Admin</a>
+            </div>
+        </div>
+        <div id="user-view" style="display: none;">
+            <span id="user-info"></span>
+            <a href="userlogin.html" id="show-history-btn" class="auth-btn">Show History</a>
+            <button id="logout-btn" class.auth-btn>Logout</button>
         </div>
     </div>
   </div>
@@ -201,6 +208,38 @@
       closePopup();
     }
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const loginDropdown = document.getElementById('login-dropdown');
+    const userView = document.getElementById('user-view');
+    const userInfo = document.getElementById('user-info');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (token) {
+      // Decode token to get user info
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const username = payload.user.email.split('@')[0];
+
+        // Update UI
+        loginDropdown.style.display = 'none';
+        userView.style.display = 'flex';
+        userInfo.textContent = `Welcome, ${username}!`;
+
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('token');
+          window.location.reload();
+        });
+      } catch (e) {
+        console.error('Failed to decode token or token is invalid:', e);
+        // If token is invalid, treat as logged out
+        localStorage.removeItem('token');
+        loginDropdown.style.display = 'block';
+        userView.style.display = 'none';
+      }
+    }
+  });
 </script>
 </body>
 </html>
