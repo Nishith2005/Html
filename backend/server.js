@@ -48,6 +48,7 @@ mongoose.connect(MONGO_URI)
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/diagnoses', require('./routes/diagnoses'));
+app.use('/api/diagnostics', require('./routes/diagnostics'));
 app.use('/api/admin', require('./routes/admin'));
 
 app.get('/', (req, res) => {
