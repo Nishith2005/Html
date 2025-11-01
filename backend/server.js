@@ -46,6 +46,7 @@ mongoose.connect(MONGO_URI)
 .catch(err => console.log(err));
 
 // API Routes
+app.use('/api/quiz', require('./routes/quiz'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/diagnoses', require('./routes/diagnoses'));
 app.use('/api/admin', require('./routes/admin'));
