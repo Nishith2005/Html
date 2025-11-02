@@ -490,6 +490,39 @@ const diagnosticOutcomes = {
   }
 };
 
+const mongoose = require('mongoose');
+const Question = require('./models/Question'); // Make sure this path is correct
+
+// Function to import data into MongoDB
+const importData = async () => {
+  try {
+    const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/healthinsight';
+    await mongoose.connect(MONGO_URI);
+
+    console.log('MongoDB connected for seeding...');
+
+    // Clear existing data
+    await Question.deleteMany();
+
+    // Prepare data for insertion
+    const dataToInsert = Object.keys(diagnosticQuestions).map(bodyPart => ({
+      bodyPart,
+      questions: diagnosticQuestions[bodyPart],
+      outcomes: diagnosticOutcomes[bodyPart],
+    }));
+
+    // Insert new data
+    await Question.insertMany(dataToInsert);
+
+    console.log('Data imported successfully!');
+    mongoose.connection.close();
+  } catch (error) {
+    console.error('Error importing data:', error);
+    mongoose.connection.close();
+    process.exit(1);
+  }
+};
+
 const generateSeedData = () => {
   try {
     const dataToInsert = Object.keys(diagnosticQuestions).map(bodyPart => ({
@@ -506,4 +539,4 @@ const generateSeedData = () => {
   }
 };
 
-generateSeedData();
+importData();
