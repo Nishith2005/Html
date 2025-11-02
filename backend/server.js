@@ -49,6 +49,7 @@ mongoose.connect(MONGO_URI)
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/diagnoses', require('./routes/diagnoses'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/questions', require('./routes/questions'));
 
 app.get('/', (req, res) => {
   res.send('HealthInsight Hub API');
